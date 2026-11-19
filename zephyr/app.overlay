@@ -1,0 +1,58 @@
+#include <freq.h>
+#include <zephyr/dt-bindings/display/panel.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/i2c/i2c.h>
+
+/ {
+	chosen {
+		zephyr,display = &round_lcd;
+	};
+
+	backlights {
+		compatible = "gpio-leds";
+		round_backlight: backlight {
+			gpios = <&xiao_d 6 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	round_display_dbi {
+		compatible = "zephyr,mipi-dbi-spi";
+		spi-dev = <&spi3>;
+		dc-gpios = <&xiao_d 3 GPIO_ACTIVE_HIGH>;
+		write-only;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		round_lcd: gc9a01@0 {
+			compatible = "galaxycore,gc9x01x";
+			reg = <0>;
+			mipi-max-frequency = <DT_FREQ_M(8)>;
+			pixel-format = <PANEL_PIXEL_FORMAT_RGB_565>;
+			width = <240>;
+			height = <240>;
+			display-inversion;
+		};
+	};
+};
+
+&usart1 {
+	status = "disabled";
+};
+
+&spi3 {
+	status = "okay";
+	cs-gpios = <&xiao_d 1 GPIO_ACTIVE_LOW>, <&xiao_d 2 GPIO_ACTIVE_LOW>;
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_STANDARD>;
+	scl-gpios = <&gpiob 6 (GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
+	sda-gpios = <&gpiob 7 (GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
+
+	round_touch: touchscreen@2e {
+		compatible = "chipsemi,chsc6x";
+		reg = <0x2e>;
+		irq-gpios = <&xiao_d 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+	};
+};

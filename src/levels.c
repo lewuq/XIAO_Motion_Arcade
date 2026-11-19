@@ -1,0 +1,218 @@
+#include "maze.h"
+
+#define LIST(type, ...) (const type[]){__VA_ARGS__}
+#define NUM(type, ...) (sizeof(LIST(type, __VA_ARGS__)) / sizeof(type))
+#define WALLS(...) .walls = LIST(struct wall, __VA_ARGS__), .wall_count = NUM(struct wall, __VA_ARGS__)
+#define TRAPS(...) .traps = LIST(struct trap, __VA_ARGS__), .trap_count = NUM(struct trap, __VA_ARGS__)
+#define FEATURES(...) .features = LIST(struct feature, __VA_ARGS__), .feature_count = NUM(struct feature, __VA_ARGS__)
+#define ITEMS(...) .items = LIST(struct item, __VA_ARGS__), .item_count = NUM(struct item, __VA_ARGS__)
+#define COINS(...) .coins = LIST(struct point, __VA_ARGS__), .coin_count = NUM(struct point, __VA_ARGS__), .all_bonus = 150
+#define P(x, y) {x, y}
+#define W(x1, y1, x2, y2) {{x1, y1}, {x2, y2}}
+#define F(kind, x, y, bx, by, radius, period, id) {MECH_##kind, {x, y}, {bx, by}, radius, period, id, false}
+#define GATE(x1, y1, x2, y2, color) {MECH_KEY, {x1, y1}, {x2, y2}, MAZE_WALL, 0, color, true}
+#define I(kind, x, y, tx, ty) {ITEM_##kind, {x, y}, {tx, ty}}
+
+const struct level_spec maze_levels[MAZE_LEVELS] = {
+	{
+		.name = "FIRST ROLL", .start = {101, 55}, .goal = {132, 203}, .target_seconds = 25,
+		WALLS(W(43, 100, 146, 100), W(95, 155, 196, 155)),
+	},
+	{
+		.name = "SWITCHBACK", .start = {82, 60}, .goal = {165, 192}, .target_seconds = 35,
+		WALLS(W(18, 86, 155, 86), W(84, 122, 222, 122), W(18, 158, 157, 158)),
+	},
+	{
+		.name = "ORBIT FALL", .start = {120, 47}, .goal = {120, 128}, .target_seconds = 45,
+		TRAPS({{193, 158}, 7}, {{87, 96}, 6}, {{116, 183}, 6}),
+		.arcs = LIST(struct arc, {64, 124, 416}, {33, 302, 596}), .arc_count = 2,
+	},
+	{
+		.name = "RED PATROL", .start = {88, 62}, .goal = {174, 184}, .target_seconds = 30,
+		.tip = "DODGE THE RED PATROL", .hint = "BLUE SHIELD TAKES ONE HIT",
+		WALLS(W(48, 110, 128, 110), W(107, 156, 200, 156)),
+		FEATURES(F(MOVING, 130, 128, 185, 128, 7, 2500, 0)),
+		ITEMS(I(SHIELD, 145, 67, 0, 0)),
+		COINS(P(108, 65), P(128, 80), P(155, 94), P(164, 115), P(106, 141), P(78, 165), P(130, 184)),
+	},
+	{
+		.name = "WARP LINE", .start = {103, 60}, .goal = {147, 193}, .target_seconds = 32,
+		.tip = "PURPLE RINGS TELEPORT", .hint = "ROLL OUT BEFORE REENTERING",
+		WALLS(W(16, 127, 224, 127), W(99, 82, 180, 82), W(80, 169, 149, 169)),
+		FEATURES(F(PORTAL, 177, 104, 67, 152, 8, 0, 0)),
+		COINS(P(75, 82), P(100, 103), P(128, 103), P(155, 104), P(74, 182), P(107, 194), P(166, 151)),
+	},
+	{
+		.name = "ICE DRIFT", .start = {111, 55}, .goal = {109, 203}, .target_seconds = 38,
+		.tip = "ICE KEEPS THE BALL SLIDING", .hint = "SLOW CAPS SPEED FOR 5 SEC",
+		WALLS(W(43, 91, 148, 91), W(91, 147, 208, 147), W(49, 181, 86, 181)),
+		FEATURES(F(ICE, 138, 101, 0, 0, 38, 0, 0), F(ICE, 89, 159, 0, 0, 30, 0, 0)),
+		ITEMS(I(SLOW, 156, 65, 0, 0)),
+		COINS(P(129, 67), P(175, 85), P(153, 113), P(123, 120), P(88, 116), P(75, 149), P(102, 180)),
+	},
+	{
+		.name = "SPIN ROOM", .start = {99, 52}, .goal = {148, 194}, .target_seconds = 38,
+		.tip = "ORANGE ARM BOUNCES YOU", .hint = "MAGNET PULLS NEARBY COINS",
+		WALLS(W(54, 91, 107, 91), W(143, 160, 205, 160), W(80, 168, 119, 168)),
+		FEATURES(F(ROTOR, 122, 127, 0, 0, 25, 2400, 0)),
+		ITEMS(I(MAGNET, 155, 68, 0, 0)),
+		COINS(P(122, 65), P(149, 88), P(172, 110), P(181, 137), P(68, 111), P(71, 147), P(131, 192)),
+	},
+	{
+		.name = "AMBER LOCK", .start = {103, 62}, .goal = {116, 198}, .target_seconds = 42,
+		.tip = "MATCH KEY TO THE AMBER DOOR", .hint = "BLINK CANNOT CROSS A LOCK",
+		WALLS(W(15, 133, 106, 133), W(145, 133, 225, 133), W(85, 94, 156, 94), W(56, 176, 110, 176)),
+		FEATURES(F(KEY, 62, 107, 0, 0, 6, 0, 0), GATE(106, 133, 145, 133, 0)),
+		ITEMS(I(BLINK, 177, 107, 167, 74)),
+		COINS(P(126, 62), P(159, 74), P(159, 110), P(125, 111), P(125, 155), P(148, 174), P(140, 194)),
+	},
+	{
+		.name = "MOON WALK", .start = {114, 56}, .goal = {156, 183}, .target_seconds = 43,
+		.tip = "LAVENDER FIELD LOWERS GRAVITY", .hint = "TILT EARLIER INSIDE THE FIELD",
+		WALLS(W(47, 92, 136, 92), W(97, 128, 210, 128), W(33, 166, 112, 166)),
+		FEATURES(F(LOW_G, 120, 119, 0, 0, 62, 0, 0)),
+		COINS(P(131, 70), P(162, 87), P(130, 107), P(103, 105), P(73, 122), P(87, 148), P(124, 154), P(148, 169)),
+	},
+	{
+		.name = "CROSS CURRENT", .start = {103, 52}, .goal = {172, 181}, .target_seconds = 45,
+		.tip = "TEAL ARROWS PUSH THE BALL", .hint = "STEER AGAINST THE BELT",
+		WALLS(W(44, 91, 145, 91), W(94, 127, 219, 127), W(37, 164, 143, 164)),
+		FEATURES(F(BELT, 135, 106, 1, 0, 38, 0, 0), F(BELT, 100, 148, -1, 0, 31, 0, 0)),
+		COINS(P(130, 64), P(171, 85), P(153, 106), P(116, 108), P(82, 110), P(77, 142), P(126, 146), P(162, 153)),
+	},
+	{
+		.name = "NO U TURN", .start = {103, 56}, .goal = {96, 199}, .target_seconds = 48,
+		.tip = "PASS IN THE ARROW DIRECTION", .hint = "THE GATE BLOCKS YOUR RETURN",
+		WALLS(W(16, 117, 121, 117), W(158, 117, 223, 117), W(86, 80, 162, 80), W(58, 158, 149, 158)),
+		FEATURES(F(ONE_WAY, 121, 117, 158, 117, 3, 0, 0)),
+		COINS(P(133, 58), P(167, 64), P(165, 94), P(141, 98), P(133, 138), P(167, 148), P(149, 179), P(112, 189)),
+	},
+	{
+		.name = "NIGHT LANTERN", .start = {108, 51}, .goal = {120, 207}, .target_seconds = 52,
+		.tip = "ONLY YOUR LANTERN SHOWS WALLS", .hint = "FOLLOW THE COINS IN THE DARK",
+		WALLS(W(28, 88, 143, 88), W(98, 124, 223, 124),
+		      W(18, 159, 141, 159), W(113, 186, 181, 186)),
+		FEATURES(F(DARK, 0, 0, 0, 0, 48, 0, 0)),
+		COINS(P(132, 63), P(157, 81), P(166, 100), P(124, 103), P(86, 105),
+		      P(76, 137), P(108, 140), P(149, 142), P(166, 165), P(94, 185)),
+		.random_count = 8,
+	},
+	{
+		.name = "MIRROR CORE", .start = {108, 51}, .goal = {126, 204}, .target_seconds = 58,
+		.tip = "PINK FIELD REVERSES YOUR TILT", .hint = "ORANGE ARMS STILL BOUNCE YOU",
+		WALLS(W(30, 86, 139, 86), W(95, 120, 223, 120),
+		      W(18, 157, 144, 157), W(118, 187, 188, 187)),
+		FEATURES(F(REVERSE, 142, 105, 0, 0, 42, 0, 0),
+			 F(ICE, 97, 145, 0, 0, 24, 0, 0), F(ROTOR, 190, 143, 0, 0, 13, 1900, 0),
+			 F(KEY, 175, 105, 0, 0, 6, 0, 1), GATE(144, 157, 189, 157, 1)),
+		ITEMS(I(SLOW, 151, 64, 0, 0), I(SHIELD, 69, 111, 0, 0)),
+		COINS(P(128, 64), P(161, 87), P(136, 103), P(103, 101), P(78, 102),
+		      P(74, 138), P(111, 137), P(155, 144), P(164, 174), P(100, 184)),
+	},
+	{
+		.name = "MEADOW RUN", .start = {112, 53}, .goal = {122, 198},
+		.target_seconds = 33, .expert_seconds = 26, .coin_target = 3,
+		.tip = "COLLECT THREE COINS", .hint = "THEN ROLL TO THE GREEN GOAL",
+		WALLS(W(37, 85, 132, 85), W(104, 145, 218, 145)),
+		COINS(P(137, 64), P(158, 90), P(128, 107), P(78, 124), P(81, 164), P(108, 187)),
+	},
+	{
+		.name = "MEADOW BOSS", .start = {113, 53}, .goal = {132, 201},
+		.target_seconds = 53, .expert_seconds = 43, .coin_target = 4,
+		.tip = "OPEN THE AMBER GATE", .hint = "DODGE THE PATROL BELOW",
+		WALLS(W(16, 117, 103, 117), W(140, 117, 224, 117), W(85, 79, 151, 79),
+		      W(36, 164, 125, 164)),
+		FEATURES(F(KEY, 72, 99, 0, 0, 6, 0, 0), GATE(103, 117, 140, 117, 0),
+			 F(MOVING, 143, 140, 182, 140, 6, 2600, 0)),
+		COINS(P(141, 62), P(164, 89), P(109, 96), P(122, 137), P(142, 162), P(123, 181)),
+	},
+	{
+		.name = "BLUE PASS", .start = {111, 55}, .goal = {119, 202},
+		.target_seconds = 41, .tip = "ICE ON EVERY TURN", .hint = "AVOID THE RED PATROL",
+		WALLS(W(18, 94, 135, 94), W(94, 139, 223, 139), W(47, 170, 127, 170)),
+		FEATURES(F(ICE, 110, 120, 0, 0, 65, 0, 0), F(MOVING, 111, 70, 139, 70, 6, 2700, 0)),
+		ITEMS(I(SLOW, 149, 72, 0, 0)),
+		COINS(P(149, 62), P(163, 93), P(188, 110), P(89, 116), P(79, 152), P(145, 183)),
+	},
+	{
+		.name = "GLACIER GATE", .start = {122, 53}, .goal = {122, 200},
+		.target_seconds = 44, .tip = "TAKE THE PURPLE KEY", .hint = "STAY SLOW ON THE ICE",
+		WALLS(W(17, 126, 109, 126), W(146, 126, 223, 126), W(90, 88, 159, 88),
+		      W(97, 171, 209, 171)),
+		FEATURES(F(ICE, 122, 119, 0, 0, 41, 0, 0),
+			 F(KEY, 75, 105, 0, 0, 6, 0, 1), GATE(109, 126, 146, 126, 1)),
+		COINS(P(145, 66), P(172, 101), P(130, 106), P(124, 146), P(81, 163), P(120, 191)),
+	},
+	{
+		.name = "FROST BOSS", .start = {101, 57}, .goal = {142, 196},
+		.target_seconds = 56, .tip = "WARP THROUGH THE ICE WALL", .hint = "THE LOWER PATROL IS FAST",
+		WALLS(W(16, 125, 223, 125), W(40, 92, 146, 92), W(113, 165, 216, 165)),
+		FEATURES(F(PORTAL, 170, 102, 76, 146, 8, 0, 0), F(ICE, 139, 116, 0, 0, 70, 0, 0),
+			 F(MOVING, 111, 188, 158, 188, 7, 2150, 0)),
+		COINS(P(131, 61), P(157, 77), P(184, 101), P(83, 169), P(88, 190), P(106, 205)),
+	},
+	{
+		.name = "EMBER TIMER", .start = {106, 57}, .goal = {123, 202},
+		.target_seconds = 44, .tip = "WAIT FOR THE GATE TO OPEN", .hint = "ORANGE LIGHT MEANS CLOSED",
+		WALLS(W(16, 123, 100, 123), W(140, 123, 222, 123),
+		      W(94, 84, 170, 84), W(61, 174, 139, 174)),
+		FEATURES(F(TIMED, 100, 123, 140, 123, 3, 3400, 0)),
+		COINS(P(135, 65), P(77, 84), P(91, 103), P(119, 145), P(158, 159), P(141, 198)),
+	},
+	{
+		.name = "CINDER BRIDGE", .start = {111, 56}, .goal = {139, 198},
+		.target_seconds = 48, .tip = "RED POOLS ARE HAZARDS", .hint = "GREEN SHIELD IS NOT REQUIRED",
+		WALLS(W(31, 96, 132, 96), W(104, 156, 216, 156)),
+		TRAPS({{174, 107}, 9}, {{94, 137}, 8}, {{89, 173}, 7}),
+		FEATURES(F(ROTOR, 150, 128, 0, 0, 15, 2600, 0)),
+		ITEMS(I(SHIELD, 152, 73, 0, 0)),
+		COINS(P(134, 61), P(157, 91), P(122, 114), P(69, 137), P(110, 177), P(133, 184)),
+	},
+	{
+		.name = "FORGE BOSS", .start = {111, 55}, .goal = {138, 199},
+		.target_seconds = 60, .tip = "KEY FIRST THEN TIME YOUR ROLL", .hint = "AVOID BOTH HOT ZONES",
+		WALLS(W(16, 111, 103, 111), W(140, 111, 221, 111),
+		      W(20, 153, 128, 153), W(167, 153, 218, 153)),
+		FEATURES(F(KEY, 76, 82, 0, 0, 6, 0, 0), GATE(103, 111, 140, 111, 0),
+			 F(TIMED, 128, 153, 167, 153, 3, 3600, 0),
+			 F(ROTOR, 190, 131, 0, 0, 11, 1800, 0)),
+		TRAPS({{93, 183}, 9}),
+		COINS(P(132, 62), P(76, 94), P(122, 91), P(129, 130), P(149, 173), P(169, 182)),
+	},
+	{
+		.name = "ZERO TIDE", .start = {105, 56}, .goal = {128, 202},
+		.target_seconds = 48, .tip = "LOW GRAVITY SLOWS STEERING", .hint = "ARROWS PUSH YOU SIDEWAYS",
+		WALLS(W(18, 89, 142, 89), W(98, 124, 223, 124), W(27, 163, 149, 163)),
+		FEATURES(F(LOW_G, 134, 110, 0, 0, 62, 0, 0), F(BELT, 94, 143, 1, 0, 27, 0, 0)),
+		COINS(P(131, 65), P(161, 82), P(154, 105), P(82, 108), P(81, 151), P(167, 172)),
+	},
+	{
+		.name = "MIRROR STARS", .start = {103, 57}, .goal = {139, 200},
+		.target_seconds = 55, .tip = "PINK FIELD REVERSES TILT", .hint = "USE THE PORTAL TO CROSS",
+		WALLS(W(16, 128, 224, 128), W(87, 86, 157, 86), W(94, 167, 214, 167)),
+		FEATURES(F(REVERSE, 157, 106, 0, 0, 31, 0, 0), F(PORTAL, 171, 107, 74, 146, 8, 0, 0)),
+		COINS(P(128, 65), P(155, 72), P(155, 108), P(83, 157), P(91, 186), P(119, 193)),
+	},
+	{
+		.name = "NOVA BOSS", .start = {112, 54}, .goal = {134, 202},
+		.target_seconds = 62, .tip = "WATCH THE MIRROR FIELD", .hint = "BRING THE KEY THROUGH THE DARK",
+		WALLS(W(16, 128, 97, 128), W(140, 128, 223, 128), W(94, 88, 165, 88),
+		      W(102, 167, 217, 167)),
+		FEATURES(F(DARK, 0, 0, 0, 0, 44, 0, 0), F(LOW_G, 98, 143, 0, 0, 38, 0, 0),
+			 F(REVERSE, 147, 106, 0, 0, 36, 0, 0),
+			 F(KEY, 68, 106, 0, 0, 6, 0, 1), GATE(97, 128, 140, 128, 1)),
+		COINS(P(134, 63), P(172, 105), P(88, 104), P(117, 145), P(82, 162), P(124, 185)),
+	},
+	{
+		.name = "FINAL BOSS", .start = {115, 53}, .goal = {135, 204},
+		.target_seconds = 74, .expert_seconds = 58, .coin_target = 4,
+		.tip = "TWO GATES AND A FINAL PATROL", .hint = "FIND BOTH COLORED KEYS",
+		WALLS(W(16, 103, 101, 103), W(139, 103, 222, 103),
+		      W(17, 150, 105, 150), W(143, 150, 222, 150)),
+		FEATURES(F(KEY, 82, 74, 0, 0, 6, 0, 0), GATE(101, 103, 139, 103, 0),
+			 F(KEY, 162, 126, 0, 0, 6, 0, 1), GATE(105, 150, 143, 150, 1),
+			 F(REVERSE, 154, 164, 0, 0, 31, 0, 0),
+			 F(MOVING, 139, 181, 167, 181, 6, 1800, 0)),
+		COINS(P(134, 69), P(99, 80), P(124, 125), P(105, 128), P(114, 171), P(112, 194)),
+	},
+};
