@@ -1,8 +1,34 @@
-# XIAO Motion Arcade
+<h1 align="center">XIAO Motion Arcade</h1>
 
-Seven tilt-and-touch games for the **Seeed Studio XIAO STM32C5** and **Round Display for XIAO**. The board's onboard IMU steers the action. The 240 × 240 touch screen handles menus, launching a pinball, and firing in space.
+<p align="center">
+  Seven tilt-and-touch games for the <strong>XIAO STM32C5</strong> and <strong>Round Display for XIAO</strong>.<br>
+  Tilt to steer with the onboard IMU, then tap the 240 × 240 screen to launch a pinball or fire in space.
+</p>
 
-[简体中文](README_CN.md) · [Download V2.0.3 UF2](firmware/latest/tilt_maze_v2.0.3.uf2?raw=true) · [Firmware history](firmware/history/) · [3D enclosure](enclosure/) · [MIT License](LICENSE)
+<p align="center">
+  <a href="https://www.seeedstudio.com/"><img src="docs/badges/seeed.png" height="26" alt="Seeed Studio Bazaar"></a>
+  <a href="https://www.seeedstudio.com/XIAO-STM32C5-p-7011.html"><img src="docs/badges/stm32c5.png" height="26" alt="XIAO STM32C5 development board"></a>
+  <a href="https://www.seeedstudio.com/1-28-Round-Touch-Display-for-Seeed-Studio-XIAO-ESP32.html"><img src="docs/badges/round-display.png" height="26" alt="Round Display for XIAO"></a>
+  <a href="https://registry.platformio.org/tools/platformio/toolchain-gccarmnoneeabi"><img src="docs/badges/arm-gcc.png" height="26" alt="Arm GCC toolchain"></a>
+  <a href="https://platformio.org/"><img src="docs/badges/platformio.png" height="26" alt="PlatformIO development platform"></a>
+  <a href="https://docs.zephyrproject.org/latest/"><img src="docs/badges/zephyr.png" height="26" alt="Zephyr RTOS"></a>
+</p>
+
+<p align="center">
+  <a href="firmware/latest/tilt_maze_v2.0.3.uf2?raw=true"><img src="docs/badges/download.png" height="26" alt="Download V2.0.3 UF2"></a>
+  <a href="firmware/history/"><img src="docs/badges/history.png" height="26" alt="Firmware history"></a>
+  <a href="enclosure/"><img src="docs/badges/enclosure.png" height="26" alt="3D-printable enclosure"></a>
+  <a href="LICENSE"><img src="docs/badges/license.png" height="26" alt="MIT License"></a>
+</p>
+
+<p align="center">
+  <strong><a href="#quick-start">Quick start</a> · <a href="#hardware">Hardware</a> · <a href="#games">Games</a> · <a href="#build-from-source">Build from source</a></strong>
+</p>
+
+<p align="center">
+  <img src="docs/badges/english-current.png" height="26" alt="English, current language">
+  <a href="README_CN.md"><img src="docs/badges/chinese.png" height="26" alt="阅读简体中文"></a>
+</p>
 
 ![XIAO Motion Arcade V2.0.3 rendered in English, showing home, lobby, world selection, and settings](docs/images/en/overview.png)
 

@@ -1,8 +1,34 @@
-# XIAO Motion Arcade · 体感游戏厅
+<h1 align="center">XIAO Motion Arcade · 体感游戏厅</h1>
 
-为 **Seeed Studio XIAO STM32C5** 和 **Round Display for XIAO** 制作的七合一掌上游戏。倾斜设备控制小球、飞船或贪吃蛇，触摸 240 × 240 圆屏选择游戏、发射弹珠或射击。
+<p align="center">
+  为 <strong>XIAO STM32C5</strong> 和 <strong>Round Display for XIAO</strong> 制作的七合一掌上游戏。<br>
+  倾斜设备控制小球、飞船或贪吃蛇，触摸 240 × 240 圆屏选择游戏、发射弹珠或射击。
+</p>
 
-[English](README.md) · [下载 V2.0.3 固件](firmware/latest/tilt_maze_v2.0.3.uf2?raw=true) · [历史固件](firmware/history/) · [3D 外壳](enclosure/) · [MIT 许可](LICENSE)
+<p align="center">
+  <a href="https://www.seeedstudio.com/"><img src="docs/badges/seeed.png" height="26" alt="Seeed Studio Bazaar 商城"></a>
+  <a href="https://www.seeedstudio.com/XIAO-STM32C5-p-7011.html"><img src="docs/badges/stm32c5.png" height="26" alt="XIAO STM32C5 开发板"></a>
+  <a href="https://www.seeedstudio.com/1-28-Round-Touch-Display-for-Seeed-Studio-XIAO-ESP32.html"><img src="docs/badges/round-display-zh.png" height="26" alt="Round Display for XIAO 圆形触摸屏"></a>
+  <a href="https://registry.platformio.org/tools/platformio/toolchain-gccarmnoneeabi"><img src="docs/badges/arm-gcc.png" height="26" alt="Arm GCC 工具链"></a>
+  <a href="https://platformio.org/"><img src="docs/badges/platformio.png" height="26" alt="PlatformIO 开发平台"></a>
+  <a href="https://docs.zephyrproject.org/latest/"><img src="docs/badges/zephyr.png" height="26" alt="Zephyr 实时操作系统"></a>
+</p>
+
+<p align="center">
+  <a href="firmware/latest/tilt_maze_v2.0.3.uf2?raw=true"><img src="docs/badges/download-zh.png" height="26" alt="下载 V2.0.3 UF2 固件"></a>
+  <a href="firmware/history/"><img src="docs/badges/history-zh.png" height="26" alt="历史固件"></a>
+  <a href="enclosure/"><img src="docs/badges/enclosure-zh.png" height="26" alt="3D 打印外壳"></a>
+  <a href="LICENSE"><img src="docs/badges/license.png" height="26" alt="MIT 许可"></a>
+</p>
+
+<p align="center">
+  <strong><a href="#快速开始">快速开始</a> · <a href="#硬件准备">硬件准备</a> · <a href="#七种玩法">七种玩法</a> · <a href="#从源码构建">从源码构建</a></strong>
+</p>
+
+<p align="center">
+  <a href="README.md"><img src="docs/badges/english.png" height="26" alt="Read in English"></a>
+  <img src="docs/badges/chinese-current.png" height="26" alt="简体中文，当前语言">
+</p>
 
 ![XIAO Motion Arcade V2.0.3 中文实渲染画面，包含首页、游戏大厅、世界选择和设置](docs/images/zh-CN/overview.png)
 
