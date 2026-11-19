@@ -15,6 +15,11 @@
 </p>
 
 <p align="center">
+  <a href="https://www.amazon.com/dp/B0GHYQ3HFG"><img src="docs/badges/lipo.png" height="26" alt="Shop for the 3.7 V LiPo battery on Amazon"></a>
+  <a href="https://www.amazon.com/dp/B096SVL65V"><img src="docs/badges/cr927.png" height="26" alt="Shop for the CR927 coin cell on Amazon"></a>
+</p>
+
+<p align="center">
   <a href="firmware/latest/tilt_maze_v2.0.3.uf2?raw=true"><img src="docs/badges/download.png" height="26" alt="Download V2.0.3 UF2"></a>
   <a href="firmware/history/"><img src="docs/badges/history.png" height="26" alt="Firmware history"></a>
   <a href="enclosure/"><img src="docs/badges/enclosure.png" height="26" alt="3D-printable enclosure"></a>
@@ -34,11 +39,13 @@
 
 ## Hardware
 
-| Part | What it does | Seeed Studio Bazaar |
+| Part | What it does | Purchase links |
 | --- | --- | --- |
-| **XIAO STM32C5** | Runs the Zephyr firmware. Its onboard LSM6DS3TR-C supplies the tilt input. | [Standard](https://www.seeedstudio.com/XIAO-STM32C5-p-7011.html) · [Pre-soldered](https://www.seeedstudio.com/XIAO-STM32C5-Pre-Solder-p-7012.html) |
-| **Round Display for XIAO** | Provides a 1.28-inch, 240 × 240 color touch screen. | [Round Display for XIAO](https://www.seeedstudio.com/1-28-Round-Touch-Display-for-Seeed-Studio-XIAO-ESP32.html) |
+| **XIAO STM32C5** | Runs the Zephyr firmware. Its onboard LSM6DS3TR-C supplies the tilt input. | Seeed Studio Bazaar · [Standard](https://www.seeedstudio.com/XIAO-STM32C5-p-7011.html) · [Pre-soldered](https://www.seeedstudio.com/XIAO-STM32C5-Pre-Solder-p-7012.html) |
+| **Round Display for XIAO** | Provides a 1.28-inch, 240 × 240 color touch screen. | [Seeed Studio Bazaar](https://www.seeedstudio.com/1-28-Round-Touch-Display-for-Seeed-Studio-XIAO-ESP32.html) |
 | **USB-C data cable** | Powers the XIAO and transfers the UF2 file. | |
+| **3.7 V rechargeable LiPo battery** (optional) | Portable power. The Round Display has a JST 1.25 mm battery connector. | [Amazon](https://www.amazon.com/dp/B0GHYQ3HFG) |
+| **CR927 coin cell** (optional) | Backup power for the Round Display's real-time clock (RTC). | [Amazon](https://www.amazon.com/dp/B096SVL65V) |
 
 The boards plug together through the XIAO headers. A USB-C data connection is sufficient to play. See [XIAO STM32C5 Getting Started](https://wiki.seeedstudio.com/xiao_stm32c5_getting_started/) and the [Round Display guide](https://wiki.seeedstudio.com/get_start_round_display/) for board orientation and hardware details.
 

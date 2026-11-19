@@ -15,6 +15,11 @@
 </p>
 
 <p align="center">
+  <a href="https://www.amazon.com/dp/B0GHYQ3HFG"><img src="docs/badges/lipo-zh.png" height="26" alt="在 Amazon 购买 3.7 V 可充电锂电池"></a>
+  <a href="https://www.amazon.com/dp/B096SVL65V"><img src="docs/badges/cr927-zh.png" height="26" alt="在 Amazon 购买 CR927 纽扣电池"></a>
+</p>
+
+<p align="center">
   <a href="firmware/latest/tilt_maze_v2.0.3.uf2?raw=true"><img src="docs/badges/download-zh.png" height="26" alt="下载 V2.0.3 UF2 固件"></a>
   <a href="firmware/history/"><img src="docs/badges/history-zh.png" height="26" alt="历史固件"></a>
   <a href="enclosure/"><img src="docs/badges/enclosure-zh.png" height="26" alt="3D 打印外壳"></a>
@@ -34,11 +39,13 @@
 
 ## 硬件准备
 
-| 硬件 | 用途 | Seeed Studio Bazaar |
+| 硬件 | 用途 | 购买链接 |
 | --- | --- | --- |
-| **XIAO STM32C5** | 运行 Zephyr 固件。板载 LSM6DS3TR-C 用来检测倾斜。 | [普通版](https://www.seeedstudio.com/XIAO-STM32C5-p-7011.html) · [预焊排针版](https://www.seeedstudio.com/XIAO-STM32C5-Pre-Solder-p-7012.html) |
-| **Round Display for XIAO** | 提供 1.28 英寸、240 × 240 的彩色触摸界面。 | [圆形触摸屏](https://www.seeedstudio.com/1-28-Round-Touch-Display-for-Seeed-Studio-XIAO-ESP32.html) |
+| **XIAO STM32C5** | 运行 Zephyr 固件。板载 LSM6DS3TR-C 用来检测倾斜。 | Seeed Studio Bazaar · [普通版](https://www.seeedstudio.com/XIAO-STM32C5-p-7011.html) · [预焊排针版](https://www.seeedstudio.com/XIAO-STM32C5-Pre-Solder-p-7012.html) |
+| **Round Display for XIAO** | 提供 1.28 英寸、240 × 240 的彩色触摸界面。 | [Seeed Studio Bazaar](https://www.seeedstudio.com/1-28-Round-Touch-Display-for-Seeed-Studio-XIAO-ESP32.html) |
 | **USB-C 数据线** | 给 XIAO 供电并传输 UF2。 | |
+| **3.7 V 可充电锂电池**（可选） | 用于便携供电。圆屏配有 JST 1.25 mm 电池接口。 | [Amazon](https://www.amazon.com/dp/B0GHYQ3HFG) |
+| **CR927 纽扣电池**（可选） | 为圆屏的实时时钟（RTC）提供备用电源。 | [Amazon](https://www.amazon.com/dp/B096SVL65V) |
 
 两块板通过 XIAO 排针相连，接 USB-C 即可游玩。排针方向和硬件说明可查阅 [XIAO STM32C5 入门](https://wiki.seeedstudio.com/xiao_stm32c5_getting_started/) 和 [圆屏使用指南](https://wiki.seeedstudio.com/get_start_round_display/)。
 
