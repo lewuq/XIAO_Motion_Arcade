@@ -77,7 +77,15 @@
 
 ## 3D 打印外壳
 
-可选的 **Round 45 V5** 外壳包含 [下壳](enclosure/01_lower_shell.stl)、[上壳](enclosure/02_upper_shell.stl) 和 [圆屏电源滑块](enclosure/03_display_power_slider.stl)。切片时按毫米导入 STL。合壳之前，可先确认手头板子的按键和电源滑块配合顺畅。
+在 Bambu Studio 中打开 [3MF 工程](enclosure/round_display.3mf)，即可载入三个零件以及原排版和切片设置。使用其他切片软件时，可以按毫米导入各零件的 STL。STEP 是由同一份 3MF 网格转换而来的多面实体，可导入 CAD 软件。
+
+| 零件 | 打印用 STL | CAD 用 STEP |
+| --- | --- | --- |
+| 下壳 | [STL](enclosure/01_lower_shell.stl) | [STEP](enclosure/01_lower_shell.step) |
+| 上壳 | [STL](enclosure/02_upper_shell.stl) | [STEP](enclosure/02_upper_shell.step) |
+| 圆屏电源滑块 | [STL](enclosure/03_display_power_slider.stl) | [STEP](enclosure/03_display_power_slider.step) |
+
+单件文件保留 3MF 中各零件的朝向，已在 XY 平面居中并将底面落在 Z = 0。合壳前可先确认外壳按键和电源滑块与实物配合顺畅。
 
 ## 从源码构建
 
